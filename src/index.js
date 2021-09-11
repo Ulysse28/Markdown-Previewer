@@ -1,17 +1,41 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import marked from "marked";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+class App extends React.Component {
+  state = {
+    output: marked("# e"),
+    newText: "",
+  };
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  createMarkup(text) {
+    return {
+      __html: text,
+    };
+  }
+
+  handleChange(event) {
+    const value = event.target.value;
+    this.setState({ newText: value });
+    this.setState({ output: marked(value) });
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Markdown</h1>
+        <textarea
+          onChange={this.handleChange.bind(this)}
+          placeholder="ee"
+          value={this.state.newText}
+        ></textarea>
+        <div
+          dangerouslySetInnerHTML={this.createMarkup(this.state.output)}
+        ></div>
+      </div>
+    );
+  }
+}
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
